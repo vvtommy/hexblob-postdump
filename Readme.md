@@ -1,4 +1,4 @@
-## hexblog-postdump
+## hexblog-postdump 💊
 
 If you run mysqldump and forget the `--hex-blob` parameter...
 

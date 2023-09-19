@@ -16,8 +16,8 @@ func convert(input []byte) []byte {
 			output.Write(input)
 			break
 		}
-		segment := input[:9]
-		if string(segment) == "_binary '" {
+		segment := string(input[:9])
+		if segment == "_binary '" {
 			input = input[9:]
 			output.Write([]byte("0x"))
 			for len(input) > 0 {
@@ -33,10 +33,24 @@ func convert(input []byte) []byte {
 						output.Write([]byte(")"))
 						break
 					}
-					if s == "\\0" {
-						output.Write([]byte("00"))
-						input = input[2:]
-						continue
+
+					if input[0] == '\\' {
+						input = input[1:]
+						switch s {
+						case "\\0":
+							output.Write([]byte("00"))
+							input = input[1:]
+							continue
+						case "\\r":
+							output.Write([]byte("0D"))
+							input = input[1:]
+							continue
+						case "\\n":
+							output.Write([]byte("0A"))
+							input = input[1:]
+							continue
+						default:
+						}
 					}
 				}
 
